@@ -1,0 +1,36 @@
+{
+  "startDate": "2024-01-01",
+  "milestones": [
+    {
+      "id": 1,
+      "title": "Days Since First Page",
+      "description": "Every day has been a new chapter in our love story",
+      "type": "days",
+      "icon": "📖"
+    },
+    {
+      "id": 2,
+      "title": "Pages Created",
+      "description": "Each page a testament to my endless love for you",
+      "type": "count",
+      "count": 25,
+      "icon": "📝"
+    },
+    {
+      "id": 3,
+      "title": "Love Letters Written",
+      "description": "Words of love flowing from my heart to yours",
+      "type": "count",
+      "count": 12,
+      "icon": "💌"
+    },
+    {
+      "id": 4,
+      "title": "Promises Made",
+      "description": "Sacred vows that will last for eternity",
+      "type": "count",
+      "count": 7,
+      "icon": "🤝"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Blush Aura — My First Page for Her",
+    "description": "The very first webpage I ever created for my Radha, expressing my love for the first time.",
+    "date": "2025-01-05",
+    "url": "https://blushaura.netlify.app/",
+    "category": "Milestones",
+    "draft": false
+  },
+  {
+    "title": "My Love Towards You — Trial of My Love",
+    "description": "A gentle trial page, a step forward in showing my growing love.",
+    "date": "2025-01-20",
+    "url": "https://mylovetowardsyou.netlify.app/",
+    "category": "Milestones",
+    "draft": false
+  },
+  {
+    "title": "Valentine’s Day for Radha ❤️",
+    "description": "A Valentine’s Day special page, made only for my Radha.",
+    "date": "2025-02-14",
+    "url": "https://valentinesdayradha.netlify.app/",
+    "category": "Special Announcements",
+    "draft": false
+  },
+  {
+    "title": "Radha’s Birthday 🎂",
+    "description": "A birthday page filled with love and wishes for my Radha.",
+    "date": "2025-04-23",
+    "url": "https://birthdaydayforyouradha.netlify.app/",
+    "category": "Special Announcements",
+    "draft": false
+  },
+  {
+    "title": "Radha — My Soul",
+    "description": "A page dedicated to expressing how Radha is my very soul.",
+    "date": "2025-06-15",
+    "url": "https://radhamysoul.netlify.app/",
+    "category": "Milestones",
+    "draft": false
+  },
+  {
+    "title": "Smile Radha 😊",
+    "description": "A special page created just to bring a smile to Radha’s face.",
+    "date": "2025-08-10",
+    "url": "https://smileradha.vercel.app/",
+    "category": "Milestones",
+    "draft": false
+  }
+]

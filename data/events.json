@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "Our Special Promise Anniversary",
+    "description": "100 days until the anniversary of our most sacred promise",
+    "targetDate": "2025-04-30T00:00:00Z",
+    "category": "Anniversary",
+    "icon": "💖"
+  },
+  {
+    "id": 2,
+    "title": "Monthly Love Letter Release",
+    "description": "Next month's love letter will be ready soon",
+    "targetDate": "2025-02-01T00:00:00Z",
+    "category": "Letters",
+    "icon": "💌"
+  },
+  {
+    "id": 3,
+    "title": "Poetry Collection Complete",
+    "description": "The spring poetry collection will be finished",
+    "targetDate": "2025-03-20T00:00:00Z",
+    "category": "Poetry",
+    "icon": "🌸"
+  }
+]

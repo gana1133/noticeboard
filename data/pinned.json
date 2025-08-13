@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Our Sacred Promise",
+    "description": "The eternal vow that binds our souls together, written in the stars.",
+    "date": "2024-12-25",
+    "url": "sacred-promise.html",
+    "category": "Promises",
+    "pinned": true
+  },
+  {
+    "id": 2,
+    "title": "Emergency Love Note",
+    "description": "For those moments when you need to remember how deeply you are loved.",
+    "date": "2025-01-01",
+    "url": "emergency-love.html",
+    "category": "Letters",
+    "pinned": true
+  }
+]

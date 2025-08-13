@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "The Day My Heart First Knew You 💖",
+    "message": "On December 14, 2019, during the short break, our eyes met for the first time. That moment still lives in my heart, untouched by time.",
+    "date": "2019-12-14",
+    "priority": "high",
+    "glowing": true
+  },
+  {
+    "id": 2,
+    "title": "Every Day, I Whispered Your Name ✨",
+    "message": "Each day, without fail, your name slipped from my lips in silence… a prayer, a promise, and a piece of my soul that will always belong to you.",
+    "date": "∞",
+    "priority": "medium",
+    "glowing": false
+  },
+  {
+    "id": 3,
+    "title": "A Promise Kept in Silence 🌸",
+    "message": "Even in quiet days, I keep my promise — you are my forever in my heart, no matter where life takes us.",
+    "date": "2025-05-26",
+    "priority": "medium",
+    "glowing": true
+  }
+]
