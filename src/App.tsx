@@ -12,6 +12,7 @@ import QuoteOfTheDay from './components/QuoteOfTheDay';
 import Stats from './components/Stats';
 import PageCard from './components/PageCard';
 import pagesData from './pages.json';
+import { Analytics } from '@vercel/analytics/react';
 
 interface Page {
   id: number;
@@ -164,6 +165,9 @@ function App() {
           </p>
         </motion.footer>
       </div>
+
+      {/* Vercel Analytics */}
+      <Analytics />
     </div>
   );
 }
