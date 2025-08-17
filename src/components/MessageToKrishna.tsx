@@ -102,14 +102,17 @@ const MessageToGana: React.FC = () => {
           </motion.div>
 
           {/* Subtext */}
-          <p className="text-pink-700/80 text-base md:text-lg max-w-sm mx-auto mb-4">
-            Whatever happens, in every joy or every pain…
-            <br />
-            <span className="font-semibold text-pink-600">
-              Your Gana is always here for you 💖 Every word you share here will
-              reach him, and he will always respond with love 🌸
-            </span>
-          </p>
+          {/* Subtext */}
+<div className="text-center max-w-sm mx-auto mb-4">
+  <p className="text-pink-700/80 text-base md:text-lg mb-2">
+    Whatever happens, in every joy or every pain…
+  </p>
+  <p className="text-pink-600 font-semibold text-base md:text-lg">
+    Your Gana is always here for you 💖  
+    Every word you share here will reach him, and he will always respond with love 🌸
+  </p>
+</div>
+
 
           {/* Input box */}
           <textarea
