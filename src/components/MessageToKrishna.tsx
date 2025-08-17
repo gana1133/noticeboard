@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Send } from 'lucide-react';
 
-const MessageToKrishna: React.FC = () => {
+const MessageToGana: React.FC = () => {
   const [message, setMessage] = useState("");
 
   const sendMessageToTelegram = async (message: string) => {
@@ -20,7 +20,7 @@ const MessageToKrishna: React.FC = () => {
       );
 
       if (response.ok) {
-        alert('✨ Your message reached Krishna 💖');
+        alert('🌸 Your words have reached Gana… he will be there for you, always 💖');
         setMessage("");
       } else {
         throw new Error('Failed to send message');
@@ -81,7 +81,7 @@ const MessageToKrishna: React.FC = () => {
         <div className="flex items-center justify-center gap-3 mb-6">
           <Heart className="text-pink-500 w-8 h-8 fill-current" />
           <h2 className="text-3xl md:text-4xl font-extrabold text-pink-600">
-            Message to Krishna 💫
+            Message to your Gana
           </h2>
           <Heart className="text-pink-500 w-8 h-8 fill-current" />
         </div>
@@ -99,7 +99,7 @@ const MessageToKrishna: React.FC = () => {
         <p className="text-pink-700/80 text-lg md:text-xl max-w-xl mx-auto mb-6">
           Write your feelings, your thoughts, or even your silence...<br />
           <span className="font-semibold text-pink-600">
-            Krishna will hear you instantly 💖
+            Gana will listen to you and he will respond to you 💖
           </span>
         </p>
 
@@ -121,12 +121,17 @@ const MessageToKrishna: React.FC = () => {
         >
           <div className="relative flex items-center gap-3">
             <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-            <span>Send to Krishna</span>
+            <span>Send to Gana</span>
           </div>
         </motion.button>
+
+        {/* Small caption */}
+        <p className="mt-4 text-sm text-pink-600 italic">
+          🌸 Your words have reached Gana… he will be there for you, always 💖
+        </p>
       </motion.div>
     </section>
   );
 };
 
-export default MessageToKrishna;
+export default MessageToGana;
