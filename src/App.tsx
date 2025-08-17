@@ -4,6 +4,7 @@ import DivaParticles from './components/DivaParticles';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import SpecialAnnouncements from './components/SpecialAnnouncements';
+import MessageToKrishna from './components/MessageToKrishna';
 import PinnedNotices from './components/PinnedNotices';
 import UpcomingEvents from './components/UpcomingEvents';
 import Milestones from './components/Milestones';
@@ -93,6 +94,9 @@ function App() {
         
         {/* Special Announcements */}
         <SpecialAnnouncements />
+        
+        {/* Message to Krishna */}
+        <MessageToKrishna />
         
         {/* Pinned Notices */}
         <PinnedNotices />
