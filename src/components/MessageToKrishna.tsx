@@ -9,12 +9,12 @@ const MessageToGana: React.FC = () => {
   const sendMessageToTelegram = async (message: string) => {
     try {
       const response = await fetch(
-        "https://api.telegram.org/bot7731464090:AAEvV2JmckYlg9HyrS40pDUDVofU-VosoQ4/sendMessage",
+        "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendMessage",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            chat_id: 809190054,
+            chat_id: <YOUR_CHAT_ID>,
             text: message,
           }),
         }
@@ -42,9 +42,9 @@ const MessageToGana: React.FC = () => {
 
   return (
     <>
+      {/* Page section (no gradient background now) */}
       <section
-        className="relative py-10 md:py-14 px-4 md:px-6 overflow-hidden flex justify-center items-center 
-        bg-gradient-to-b from-pink-100 via-purple-200/40 to-pink-100"
+        className="relative py-10 md:py-14 px-4 md:px-6 overflow-hidden flex justify-center items-center bg-transparent"
       >
         {/* Floating sparkles */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -101,18 +101,16 @@ const MessageToGana: React.FC = () => {
             💌
           </motion.div>
 
-         {/* Subtext */}
-<div className="text-center max-w-sm mx-auto mb-4">
-  <p className="text-pink-700/80 text-base md:text-lg mb-2">
-    Whatever happens, in every joy or every pain…
-  </p>
-  <p className="text-pink-600 font-semibold text-base md:text-lg">
-    Your Gana is always here for you 💖 <br />
-    Every word you share here will reach him, and he will always respond with love 🌸
-  </p>
-</div>
-
-
+          {/* Subtext */}
+          <div className="text-center max-w-sm mx-auto mb-4">
+            <p className="text-pink-700/80 text-base md:text-lg mb-2">
+              Whatever happens, in every joy or every pain…
+            </p>
+            <p className="text-pink-600 font-semibold text-base md:text-lg">
+              Your Gana is always here for you 💖 <br />
+              Every word you share here will reach him, and he will always respond with love 🌸
+            </p>
+          </div>
 
           {/* Input box */}
           <textarea
@@ -177,8 +175,7 @@ const MessageToGana: React.FC = () => {
             className="bg-white rounded-2xl shadow-xl p-6 text-center max-w-sm"
           >
             <p className="text-pink-600 text-lg font-semibold">
-              🌸 Your words have reached Gana… he will be there for you, always
-              💖
+              🌸 Your words have reached Gana… he will be there for you, always 💖
             </p>
           </motion.div>
         </motion.div>
