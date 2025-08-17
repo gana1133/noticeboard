@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Heart, Send } from 'lucide-react';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Heart, Send } from "lucide-react";
 
 const MessageToGana: React.FC = () => {
   const [message, setMessage] = useState("");
@@ -9,10 +9,10 @@ const MessageToGana: React.FC = () => {
   const sendMessageToTelegram = async (message: string) => {
     try {
       const response = await fetch(
-        'https://api.telegram.org/bot7731464090:AAEvV2JmckYlg9HyrS40pDUDVofU-VosoQ4/sendMessage',
+        "https://api.telegram.org/bot7731464090:AAEvV2JmckYlg9HyrS40pDUDVofU-VosoQ4/sendMessage",
         {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             chat_id: 809190054,
             text: message,
@@ -24,11 +24,11 @@ const MessageToGana: React.FC = () => {
         setShowModal(true); // ✅ show modal instead of alert
         setMessage("");
       } else {
-        throw new Error('Failed to send message');
+        throw new Error("Failed to send message");
       }
     } catch (error) {
-      alert('❌ Failed to send message. Please try again.');
-      console.error('Error sending message:', error);
+      alert("❌ Failed to send message. Please try again.");
+      console.error("Error sending message:", error);
     }
   };
 
@@ -42,9 +42,10 @@ const MessageToGana: React.FC = () => {
 
   return (
     <>
-      <section className="relative py-10 md:py-14 px-4 md:px-6 overflow-hidden flex justify-center items-center 
-        bg-gradient-to-b from-pink-100 via-purple-200/40 to-pink-100">
-        
+      <section
+        className="relative py-10 md:py-14 px-4 md:px-6 overflow-hidden flex justify-center items-center 
+        bg-gradient-to-b from-pink-100 via-purple-200/40 to-pink-100"
+      >
         {/* Floating sparkles */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(12)].map((_, i) => (
@@ -102,9 +103,11 @@ const MessageToGana: React.FC = () => {
 
           {/* Subtext */}
           <p className="text-pink-700/80 text-base md:text-lg max-w-sm mx-auto mb-4">
-            Write your feelings, your thoughts, or even your silence...<br />
+            Whatever happens, in every joy or every pain…
+            <br />
             <span className="font-semibold text-pink-600">
-              Gana will listen to you and he will respond to you 💖
+              Your Gana is always here for you 💖 Every word you share here will
+              reach him, and he will always respond with love 🌸
             </span>
           </p>
 
@@ -122,7 +125,10 @@ const MessageToGana: React.FC = () => {
           {/* Send Button */}
           <motion.button
             onClick={handleSendMessage}
-            whileHover={{ scale: 1.05, boxShadow: '0 12px 24px rgba(236, 72, 153, 0.4)' }}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 12px 24px rgba(236, 72, 153, 0.4)",
+            }}
             whileTap={{ scale: 0.95 }}
             className="group relative w-full md:w-auto bg-gradient-to-r from-pink-500 to-rose-400 
               hover:from-pink-600 hover:to-rose-500 text-white font-medium text-base 
@@ -168,8 +174,8 @@ const MessageToGana: React.FC = () => {
             className="bg-white rounded-2xl shadow-xl p-6 text-center max-w-sm"
           >
             <p className="text-pink-600 text-lg font-semibold">
-              🌸 Your words have reached Gana…  
-              he will be there for you, always 💖
+              🌸 Your words have reached Gana… he will be there for you, always
+              💖
             </p>
           </motion.div>
         </motion.div>
