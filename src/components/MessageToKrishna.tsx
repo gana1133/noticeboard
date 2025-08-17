@@ -4,7 +4,7 @@ import { Heart, Send } from "lucide-react";
 
 const MessageToGana: React.FC = () => {
   const [message, setMessage] = useState("");
-  const [showModal, setShowModal] = useState(false); // ✅ for custom modal
+  const [showModal, setShowModal] = useState(false);
 
   const sendMessageToTelegram = async (message: string) => {
     try {
@@ -21,7 +21,7 @@ const MessageToGana: React.FC = () => {
       );
 
       if (response.ok) {
-        setShowModal(true); // ✅ show modal instead of alert
+        setShowModal(true);
         setMessage("");
       } else {
         throw new Error("Failed to send message");
@@ -42,10 +42,8 @@ const MessageToGana: React.FC = () => {
 
   return (
     <>
-      <section
-        className="relative py-10 md:py-14 px-4 md:px-6 overflow-hidden flex justify-center items-center 
-        bg-gradient-to-b from-pink-100 via-purple-200/40 to-pink-100"
-      >
+      {/* Page section WITHOUT gradient background */}
+      <section className="relative py-10 md:py-14 px-4 md:px-6 overflow-hidden flex justify-center items-center bg-transparent">
         {/* Floating sparkles */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(12)].map((_, i) => (
@@ -101,18 +99,16 @@ const MessageToGana: React.FC = () => {
             💌
           </motion.div>
 
-         {/* Subtext */}
-<div className="text-center max-w-sm mx-auto mb-4">
-  <p className="text-pink-700/80 text-base md:text-lg mb-2">
-    Whatever happens, in every joy or every pain…
-  </p>
-  <p className="text-pink-600 font-semibold text-base md:text-lg">
-    Your Gana is always here for you 💖 <br />
-    Every word you share here will reach him, and he will always respond with love 🌸
-  </p>
-</div>
-
-
+          {/* Subtext */}
+          <div className="text-center max-w-sm mx-auto mb-4">
+            <p className="text-pink-700/80 text-base md:text-lg mb-2">
+              Whatever happens, in every joy or every pain…
+            </p>
+            <p className="text-pink-600 font-semibold text-base md:text-lg">
+              Your Gana is always here for you 💖 <br />
+              Every word you share here will reach him, and he will always respond with love 🌸
+            </p>
+          </div>
 
           {/* Input box */}
           <textarea
@@ -177,8 +173,7 @@ const MessageToGana: React.FC = () => {
             className="bg-white rounded-2xl shadow-xl p-6 text-center max-w-sm"
           >
             <p className="text-pink-600 text-lg font-semibold">
-              🌸 Your words have reached Gana… he will be there for you, always
-              💖
+              🌸 Your words have reached Gana… he will be there for you, always 💖
             </p>
           </motion.div>
         </motion.div>
