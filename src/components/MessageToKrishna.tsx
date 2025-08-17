@@ -1,114 +1,168 @@
-"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Heart, Send } from 'lucide-react';
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Heart, Send } from "lucide-react";
-
-const MessageToGana: React.FC = () => {
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const sendMessageToTelegram = async () => {
-    if (!message.trim()) {
-      alert("Please write something from your heart 💌");
-      return;
-    }
-
-    const confirmed = confirm(`Do you want to send this message to Gana? 💖\n\n"${message}"`);
-    if (!confirmed) return;
-
-    setLoading(true);
+const MessageToKrishna: React.FC = () => {
+  const sendMessageToTelegram = async (message: string) => {
     try {
-      const response = await fetch(
-        `https://api.telegram.org/bot7731464090:AAEvV2Ut-_1sfBO7ifjNCWZYo3s5X1DeXr0/sendMessage`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: "809190054",
-            text: `💌 New Message for Gana:\n\n${message}`,
-          }),
-        }
-      );
+      const response = await fetch('https://api.telegram.org/bot7731464090:AAEvV2JmckYlg9HyrS40pDUDVofU-VosoQ4/sendMessage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: 809190054,
+          text: message,
+        }),
+      });
 
       if (response.ok) {
-        alert("✅ Your message has reached Gana 💖 He will respond to you soon.");
-        setMessage("");
+        alert('Message sent successfully 💖');
       } else {
-        alert("❌ Failed to send message. Please try again.");
+        throw new Error('Failed to send message');
       }
     } catch (error) {
-      alert("⚠️ Network error. Please check your connection.");
-    } finally {
-      setLoading(false);
+      alert('Failed to send message. Please try again.');
+      console.error('Error sending message:', error);
+    }
+  };
+
+  const handleSendMessage = () => {
+    const message = prompt('Enter your heartfelt message:');
+    
+    if (message && message.trim()) {
+      const confirmed = confirm(`Do you want to send this message to Krishna: ${message} ?`);
+      
+      if (confirmed) {
+        sendMessageToTelegram(message.trim());
+      }
     }
   };
 
   return (
-    <section className="relative py-24 px-6 bg-gradient-to-br from-pink-50 via-rose-100 to-pink-50 overflow-hidden">
-      {/* floating background hearts */}
-      <motion.div
-        className="absolute inset-0 opacity-20 pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2 }}
-      >
-        {Array.from({ length: 10 }).map((_, i) => (
+    <section className="relative py-16 px-4 overflow-hidden" style={{ backgroundColor: '#ffe6f0' }}>
+      {/* Floating Hearts Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[...Array(12)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute text-pink-400"
-            initial={{ y: "100vh", x: Math.random() * window.innerWidth }}
-            animate={{ y: "-10vh" }}
-            transition={{ duration: 8 + Math.random() * 5, repeat: Infinity, delay: i * 0.8 }}
+            className="absolute text-pink-300/30"
+            style={{
+              left: `${10 + (i * 8) % 80}%`,
+              top: `${20 + (i * 15) % 60}%`,
+              fontSize: `${12 + (i % 3) * 4}px`,
+            }}
+            animate={{
+              y: [-10, -25, -10],
+              opacity: [0.3, 0.6, 0.3],
+              rotate: [0, 10, -10, 0],
+            }}
+            transition={{
+              duration: 4 + (i % 3),
+              repeat: Infinity,
+              delay: i * 0.5,
+              ease: "easeInOut",
+            }}
           >
-            ❤️
+            💖
           </motion.div>
         ))}
-      </motion.div>
+      </div>
 
-      <div className="relative max-w-3xl mx-auto text-center backdrop-blur-xl bg-white/70 rounded-3xl shadow-2xl p-12 border border-pink-200">
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto text-center">
+        {/* Headline */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-pink-700 flex justify-center items-center gap-3">
-            <Heart className="w-8 h-8 text-rose-500 animate-pulse" />
-            Message to Gana
-            <Heart className="w-8 h-8 text-rose-500 animate-pulse" />
-          </h2>
-          <p className="mt-4 text-lg md:text-xl text-pink-700/80">
-            Write your heart here 💌 Your words will reach Gana, and he will respond for you.
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <Heart className="text-pink-500 w-10 h-10 fill-current" />
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 bg-clip-text text-transparent">
+              Send Your Heartfelt Message
+            </h2>
+            <Heart className="text-pink-500 w-10 h-10 fill-current" />
+          </div>
+          
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="text-6xl mb-4"
+          >
+            💌
+          </motion.div>
+          
+          <p className="text-pink-700/80 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            Share your thoughts, feelings, or anything that's in your heart. 
+            Your message will reach Krishna directly.
           </p>
         </motion.div>
 
-        {/* Input area */}
+        {/* Send Message Button */}
         <motion.div
-          className="mt-8 flex flex-col gap-4"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your heartfelt message..."
-            className="w-full h-40 p-4 rounded-2xl border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400 text-gray-700 shadow-inner"
-          />
           <motion.button
-            onClick={sendMessageToTelegram}
-            disabled={loading}
-            whileHover={{ scale: 1.05 }}
+            onClick={handleSendMessage}
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: '0 20px 40px rgba(236, 72, 153, 0.4)',
+            }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center justify-center gap-2 px-8 py-4 rounded-full text-lg font-semibold bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg hover:shadow-pink-300 transition-all"
+            className="group relative bg-gradient-to-r from-pink-500 to-pink-400 hover:from-pink-600 hover:to-pink-500 text-white font-bold text-xl md:text-2xl py-6 px-12 rounded-2xl shadow-2xl transition-all duration-300 ease-in-out transform"
           >
-            {loading ? "Sending..." : "Send to Gana"}
-            <Send className="w-5 h-5" />
+            {/* Button glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-pink-400 rounded-2xl blur-lg opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+            
+            {/* Button content */}
+            <div className="relative flex items-center gap-3">
+              <Send className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+              <span>Send Message</span>
+              <motion.span
+                animate={{ rotate: [0, 15, -15, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                💌
+              </motion.span>
+            </div>
           </motion.button>
+        </motion.div>
+
+        {/* Decorative elements */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.8 }}
+          className="mt-12 flex justify-center gap-8"
+        >
+          {['💕', '✨', '🌸', '✨', '💕'].map((emoji, index) => (
+            <motion.div
+              key={index}
+              animate={{ 
+                y: [0, -10, 0],
+                opacity: [0.6, 1, 0.6],
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                delay: index * 0.2,
+              }}
+              className="text-2xl"
+            >
+              {emoji}
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>
   );
 };
 
-export default MessageToGana;
+export default MessageToKrishna;
