@@ -213,10 +213,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
-              className="text-center"
+              className="text-center bg-white/10 rounded-xl p-4 border border-white/20"
             >
               <p className="text-white/60 text-xs">
-                <span className="font-medium">Hint:</span> gana birthday, yours birthday, the day she saw you first [142314]
+                <span className="font-semibold text-white/80">Hint:</span> gana birthday, yours birthday, the day she saw you first <span className="font-bold text-pink-300">{142314}</span>
               </p>
             </motion.div>
           </motion.form>
