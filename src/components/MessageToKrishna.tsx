@@ -152,7 +152,8 @@ const MessageToGana: React.FC = () => {
           <p className="mt-6 text-center text-sm text-pink-600 italic font-medium">
             🌸 Always love you Radha
           </p>
-        </div>
+</motion.div>
+
       </section>
 
       {/* Custom modal */}
