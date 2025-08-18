@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import LoginPage from './components/LoginPage';
 import DivaParticles from './components/DivaParticles';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
@@ -28,6 +29,7 @@ interface Page {
 function App() {
   const [pages, setPages] = useState<Page[]>([]);
   const [activeSection, setActiveSection] = useState('home');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     // Filter out draft pages and sort by date (newest first)
@@ -72,6 +74,11 @@ function App() {
 
   const latestPage = pages[0];
   const latestDate = latestPage?.date || '';
+
+  // Show login page if not logged in
+  if (!isLoggedIn) {
+    return <LoginPage onLoginSuccess={() => setIsLoggedIn(true)} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
