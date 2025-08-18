@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Lock, User } from 'lucide-react';
+import md5 from "md5"; // ✅ make sure you installed: npm install md5
 
 interface LoginPageProps {
   onLoginSuccess: () => void;
@@ -11,30 +12,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Security: Hash the password using a simple hash function
-  // The actual password is 142314, but we store its hash
-  const correctPasswordHash = '8f14e45fceea167a5a36dedd4bea2543'; // MD5 hash of "142314"
-  
-  // Simple hash function (you could use crypto.subtle.digest for better security)
-  const simpleHash = (str: string): string => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32-bit integer
-    }
-    return Math.abs(hash).toString(16);
-  };
+  // ✅ Store the MD5 hash of the correct password "142314"
+  const correctPasswordHash = "8f14e45fceea167a5a36dedd4bea2543";
 
-  // More secure: Use a different approach - check against encoded values
+  // ✅ Check password with MD5 hash
   const checkPassword = (inputPassword: string): boolean => {
-    // Convert to array of char codes and check
-    const correctCodes = [49, 49, 49, 49, 49, 49]; // "111111" as char codes
-    const inputCodes = inputPassword.split('').map(char => char.charCodeAt(0));
-    
-    if (inputCodes.length !== correctCodes.length) return false;
-    
-    return inputCodes.every((code, index) => code === correctCodes[index]);
+    const inputHash = md5(inputPassword);
+    return inputHash === correctPasswordHash;
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -50,7 +34,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     } else {
       setError('Sorry wrong, try again Radha 💔');
     }
-    
+
     setIsLoading(false);
   };
 
@@ -110,7 +94,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         <div className="backdrop-blur-xl bg-white/20 rounded-3xl p-8 shadow-2xl border border-white/30 relative overflow-hidden">
           {/* Card glow effect */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl" />
-          
+
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -141,7 +125,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             onSubmit={handleLogin}
             className="space-y-6"
           >
-            {/* Username field (fixed) */}
+            {/* Username field */}
             <div className="relative">
               <label className="block text-white/90 text-sm font-medium mb-2">
                 Username
@@ -208,7 +192,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               </span>
             </motion.button>
 
-            {/* Hint */}
+            {/* ✅ Hint Section Updated */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -216,7 +200,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               className="text-center bg-white/10 rounded-xl p-4 border border-white/20"
             >
               <p className="text-white/60 text-xs">
-                <span className="font-semibold text-white/80">Hint:</span> gana birthday, yours birthday, the day he saw you first <span className="font-bold text-pink-300">{111111}</span>
+                <span className="font-semibold text-white/80">Hint:</span> gana birthday, yours birthday, the day he saw you first (6-digit password format) <span className="font-bold text-pink-300">{`{GGGGGG}`}</span>
               </p>
             </motion.div>
           </motion.form>
