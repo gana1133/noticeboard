@@ -199,7 +199,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               className="text-center bg-white/10 rounded-xl p-4 border border-white/20"
             >
               <p className="text-white/60 text-xs">
-                <span className="font-semibold text-white/80">Hint:</span> gana birthday, yours birthday, the day he saw you first <span className="font-bold text-pink-300">{`{GGGGGG}`}</span>
+                <span className="font-semibold text-white/80">Hint:</span> 
+                Gana’s birthday, Radha’s birthday, and the day he saw radha first time. 
+                <br />Line them up → 6 digits <span className="font-bold text-pink-300">{`{GGGGGG}`}</span>
               </p>
             </motion.div>
           </motion.form>
