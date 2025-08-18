@@ -198,10 +198,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               transition={{ delay: 0.8 }}
               className="text-center bg-white/10 rounded-xl p-4 border border-white/20"
             >
-              <p className="text-white/60 text-xs">
-                <span className="font-semibold text-white/80">Hint:</span> 
-                Gana’s birthday, Radha’s birthday, and the day he saw radha first time {dates}. 
-                <br />Line them up → 6 digits <span className="font-bold text-pink-300">{`{GGGGGG}`}</span>
+              <p className="text-gray-200 text-sm">
+                <span className="font-semibold text-white">Hint:</span>  
+                Line up <span className="font-bold">three dates</span> —  
+                <br />Gana’s birthday, Radha’s birthday, and the day he saw Radha first time.  
+                <br />(Write them one after another → 6 digits) <span className="font-bold text-pink-300">{`{GGGGGG}`}</span>
               </p>
             </motion.div>
           </motion.form>
