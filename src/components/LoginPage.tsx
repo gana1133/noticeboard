@@ -200,7 +200,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             >
               <p className="text-white/60 text-xs">
                 <span className="font-semibold text-white/80">Hint:</span> 
-                Gana’s birthday, Radha’s birthday, and the day he saw radha first time. 
+                Gana’s birthday, Radha’s birthday, and the day he saw radha first time {dates}. 
                 <br />Line them up → 6 digits <span className="font-bold text-pink-300">{`{GGGGGG}`}</span>
               </p>
             </motion.div>
