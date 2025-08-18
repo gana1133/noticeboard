@@ -29,7 +29,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   // More secure: Use a different approach - check against encoded values
   const checkPassword = (inputPassword: string): boolean => {
     // Convert to array of char codes and check
-    const correctCodes = [49, 52, 50, 51, 49, 52]; // "142314" as char codes
+    const correctCodes = [49, 49, 49, 49, 49, 49]; // "111111" as char codes
     const inputCodes = inputPassword.split('').map(char => char.charCodeAt(0));
     
     if (inputCodes.length !== correctCodes.length) return false;
@@ -216,7 +216,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               className="text-center bg-white/10 rounded-xl p-4 border border-white/20"
             >
               <p className="text-white/60 text-xs">
-                <span className="font-semibold text-white/80">Hint:</span> gana birthday, yours birthday, the day she saw you first <span className="font-bold text-pink-300">{142314}</span>
+                <span className="font-semibold text-white/80">Hint:</span> gana birthday, yours birthday, the day he saw you first <span className="font-bold text-pink-300">{111111}</span>
               </p>
             </motion.div>
           </motion.form>
