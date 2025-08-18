@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Lock, User } from 'lucide-react';
-import md5 from "md5"; // ✅ make sure you installed: npm install md5
 
 interface LoginPageProps {
   onLoginSuccess: () => void;
@@ -12,13 +11,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // ✅ Store the MD5 hash of the correct password "142314"
-  const correctPasswordHash = "8f14e45fceea167a5a36dedd4bea2543";
-
-  // ✅ Check password with MD5 hash
+  // ✅ Secure password check (ASCII codes for "142314")
   const checkPassword = (inputPassword: string): boolean => {
-    const inputHash = md5(inputPassword);
-    return inputHash === correctPasswordHash;
+    const correctCodes = [49, 52, 50, 51, 49, 52]; // "142314" as char codes
+    const inputCodes = inputPassword.split('').map(char => char.charCodeAt(0));
+
+    if (inputCodes.length !== correctCodes.length) return false;
+    return inputCodes.every((code, index) => code === correctCodes[index]);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -34,7 +33,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     } else {
       setError('Sorry wrong, try again Radha 💔');
     }
-
+    
     setIsLoading(false);
   };
 
@@ -94,7 +93,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         <div className="backdrop-blur-xl bg-white/20 rounded-3xl p-8 shadow-2xl border border-white/30 relative overflow-hidden">
           {/* Card glow effect */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl" />
-
+          
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -125,7 +124,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             onSubmit={handleLogin}
             className="space-y-6"
           >
-            {/* Username field */}
+            {/* Username field (fixed) */}
             <div className="relative">
               <label className="block text-white/90 text-sm font-medium mb-2">
                 Username
@@ -192,7 +191,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               </span>
             </motion.button>
 
-            {/* ✅ Hint Section Updated */}
+            {/* Hint */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -200,7 +199,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               className="text-center bg-white/10 rounded-xl p-4 border border-white/20"
             >
               <p className="text-white/60 text-xs">
-                <span className="font-semibold text-white/80">Hint:</span> gana birthday, yours birthday, the day he saw you first (6-digit password format) <span className="font-bold text-pink-300">{`{GGGGGG}`}</span>
+                <span className="font-semibold text-white/80">Hint:</span> gana birthday, yours birthday, the day he saw you first <span className="font-bold text-pink-300">{`{GGGGGG}`}</span>
               </p>
             </motion.div>
           </motion.form>
