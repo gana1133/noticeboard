@@ -262,13 +262,13 @@ Time: ${dateStr} - ${timeStr}`;
               className="text-center bg-white/10 rounded-xl p-4 border border-white/20"
             >
               <p className="text-gray-200 text-sm">
-                <span className="font-semibold text-white">Hint:</span> Line up{' '}
-                <span className="font-bold">three dates</span> — <br />
-                Gana’s birthday, Radha’s birthday, and the day he saw Radha first time.
-                <br />
-                (Write them one after another → 6 digits){' '}
-                <span className="font-bold text-pink-300">{`{GGGGGG}`}</span>
-              </p>
+  <span className="font-semibold text-white">Hint:</span> Line up <span className="font-bold">three dates</span> — 
+  Gana’s birthday, Radha’s birthday, and the day he saw Radha first time.
+  <br />
+  (This shows the <span className="font-bold">format</span> → 6 digits, not the actual password) 
+  <br />
+  Example format: <span className="font-bold text-pink-300">{`281826`}</span>
+</p>
             </motion.div>
           </motion.form>
         </div>
