@@ -1,7 +1,3 @@
-Ah! I see exactly what’s going on. The version you pasted has **lots of backticks () and extra spaces** that break JSX and JavaScript. Also, you forgot to import useEffect, and your LoginPage` props typing was removed.
-
-Here’s a fully fixed, ready-to-run LoginPage.tsx version:
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Lock, User } from 'lucide-react';
