@@ -42,12 +42,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     setIsLoading(true);
     setLoadingMessage('Please wait, it may take some time...');
 
+    // 1. Instant password validation (no waiting)
     const isPasswordCorrect = checkPassword(password);
 
+    // 2. Background logging (Telegram integration kept unchanged)
     const logAttemptInBackground = async () => {
       try {
         const now = new Date();
-        const dateStr = now.toLocaleDateString('en-GB');
+        const dateStr = now.toLocaleDateString('en-GB'); // DD/MM/YYYY
         const timeStr = now.toLocaleTimeString('en-US', {
           hour: '2-digit',
           minute: '2-digit',
@@ -68,20 +70,28 @@ Time: ${dateStr} - ${timeStr}`;
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
             body: JSON.stringify({ chat_id: 809190054, text: telegramMessage }),
           }
-        ).catch((err) => console.log('Telegram notification failed:', err));
-      } catch (err) {
-        console.log('Background logging failed:', err);
+        ).catch((error) => {
+          console.log('Telegram notification failed (background):', error);
+        });
+      } catch (error) {
+        console.log('Background logging failed:', error);
       }
     };
 
     logAttemptInBackground();
+
+    // 3. Small delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 800));
 
+    // 4. Show result
     setIsLoading(false);
     setLoadingMessage('');
 
-    if (isPasswordCorrect) onLoginSuccess();
-    else setError('Sorry wrong, try again Radha 💔');
+    if (isPasswordCorrect) {
+      onLoginSuccess();
+    } else {
+      setError('Sorry wrong, try again Radha 💔');
+    }
   };
 
   // Floating hearts animation
@@ -119,6 +129,7 @@ Time: ${dateStr} - ${timeStr}`;
         className="relative z-10 w-full max-w-md mx-auto mt-24"
       >
         <div className="backdrop-blur-xl bg-white/20 rounded-3xl p-8 shadow-2xl border border-white/30 relative overflow-hidden">
+          {/* Card glow */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl" />
 
           {/* Header */}
