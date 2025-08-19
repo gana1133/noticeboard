@@ -14,31 +14,40 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const [userLocation, setUserLocation] = useState('Unknown');
   const [loadingMessage, setLoadingMessage] = useState('');
 
-  // Fetch IP address and approximate location
+  // Fetch IPv4 and approximate location
   useEffect(() => {
     const fetchIPAndLocation = async () => {
       try {
-        // 1. Get IP
-        const ipRes = await fetch('https://api64.ipify.org?format=json');
-        const ipData = await ipRes.json();
-        const ip = ipData.ip || 'Unknown';
-        setUserIP(ip);
+        // 1. Get IPv4 address
+        const resIP = await fetch('https://api.ipify.org?format=json');
+        const dataIP = await resIP.json();
+        setUserIP(dataIP.ip || 'Unknown');
 
-        // 2. Get location info using free API
-        const locRes = await fetch(`https://ipinfo.io/${ip}/json?token=`);
-        if (locRes.ok) {
-          const locData = await locRes.json();
-          const location = `${locData.city || ''}, ${locData.region || ''}, ${locData.country || ''}`;
-          setUserLocation(location);
-        } else {
-          setUserLocation('Unknown');
+        // 2. Get location from IP
+        const resLoc = await fetch(`https://ipapi.co/${dataIP.ip}/json/`);
+        const dataLoc = await resLoc.json();
+        if (dataLoc && dataLoc.city && dataLoc.region && dataLoc.country) {
+          setUserLocation(`${dataLoc.city}, ${dataLoc.region}, ${dataLoc.country}`);
         }
       } catch (e) {
-        console.log('Could not fetch IP or location:', e);
+        console.log('Could not fetch IP/location:', e);
         setUserIP('Unknown');
         setUserLocation('Unknown');
       }
+
+      // 3. Optional: get accurate location via browser
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            setUserLocation(`Lat: ${pos.coords.latitude.toFixed(3)}, Lon: ${pos.coords.longitude.toFixed(3)}`);
+          },
+          (err) => {
+            console.log('Browser geolocation denied or failed:', err);
+          }
+        );
+      }
     };
+
     fetchIPAndLocation();
   }, []);
 
@@ -58,16 +67,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
     const isPasswordCorrect = checkPassword(password);
 
-    // Background logging (Telegram kept unchanged)
+    // Telegram logging (kept unchanged)
     const logAttemptInBackground = async () => {
       try {
         const now = new Date();
         const dateStr = now.toLocaleDateString('en-GB');
-        const timeStr = now.toLocaleTimeString('en-US', {
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: true,
-        });
+        const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
         const status = isPasswordCorrect ? 'Success ✅' : 'Wrong ❌';
 
         const telegramMessage = `🔔 Login Attempt
@@ -91,9 +96,12 @@ Time: ${dateStr} - ${timeStr}`;
         console.log('Background logging failed:', error);
       }
     };
+
     logAttemptInBackground();
 
+    // Small delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 800));
+
     setIsLoading(false);
     setLoadingMessage('');
 
@@ -139,18 +147,21 @@ Time: ${dateStr} - ${timeStr}`;
         className="relative z-10 w-full max-w-md mx-auto mt-24"
       >
         <div className="backdrop-blur-xl bg-white/20 rounded-3xl p-8 shadow-2xl border border-white/30 relative overflow-hidden">
+          {/* Card glow */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl" />
+
+          {/* Header */}
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center mb-8">
             <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }} className="inline-block mb-4">
               <Heart className="w-16 h-16 text-pink-300 fill-current mx-auto" />
             </motion.div>
             <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
             <p className="text-white/80 text-sm">Enter your details to access the notice board</p>
-            <p className="text-white/60 text-xs mt-1">IP: {userIP} | Location: {userLocation}</p>
           </motion.div>
 
           {/* Login form */}
           <motion.form initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} onSubmit={handleLogin} className="space-y-6">
+            {/* Username */}
             <div className="relative">
               <label className="block text-white/90 text-sm font-medium mb-2">Username</label>
               <div className="relative">
@@ -165,6 +176,7 @@ Time: ${dateStr} - ${timeStr}`;
               </div>
             </div>
 
+            {/* Password */}
             <div className="relative">
               <label className="block text-white/90 text-sm font-medium mb-2">Password</label>
               <div className="relative">
@@ -180,19 +192,28 @@ Time: ${dateStr} - ${timeStr}`;
               </div>
             </div>
 
+            {/* Error */}
             {error && (
               <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-red-300 text-sm text-center bg-red-500/20 rounded-lg p-3 border border-red-400/30">
                 {error}
               </motion.div>
             )}
 
+            {/* Loading */}
             {loadingMessage && (
               <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-blue-300 text-sm text-center bg-blue-500/20 rounded-lg p-3 border border-blue-400/30">
                 {loadingMessage}
               </motion.div>
             )}
 
-            <motion.button type="submit" disabled={isLoading} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-pink-500/25 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden">
+            {/* Login button */}
+            <motion.button
+              type="submit"
+              disabled={isLoading}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-pink-500/25 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+            >
               {isLoading && (
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-rose-600 flex items-center justify-center">
                   <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" />
@@ -201,11 +222,12 @@ Time: ${dateStr} - ${timeStr}`;
               <span className={isLoading ? 'opacity-0' : 'opacity-100'}>Login</span>
             </motion.button>
 
+            {/* Hint */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-center bg-white/10 rounded-xl p-4 border border-white/20 shadow-md shadow-pink-400/30">
               <p className="text-gray-200 text-sm">
                 <span className="font-semibold text-white">Hint:</span> Line up <span className="font-bold">three dates</span> — Gana’s birthday, Radha’s birthday, and the day he saw Radha first time.
                 <br />
-                (This shows the <span className="font-bold">format</span> → 6 digits, not the actual password) 
+                (This shows the <span className="font-bold">format</span> → 6 digits, not the actual password)
                 <br />
                 Example format: <span className="font-bold text-pink-300">{`281826`}</span>
               </p>
@@ -224,4 +246,4 @@ Time: ${dateStr} - ${timeStr}`;
   );
 };
 
-export default LoginPage
+export default LoginPage;
