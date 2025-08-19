@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Lock, User } from 'lucide-react';
 
@@ -12,6 +12,21 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userIP, setUserIP] = useState('Unknown');
   const [loadingMessage, setLoadingMessage] = useState('');
+
+  // Fetch IP address on component mount
+  useEffect(() => {
+    const fetchIPAddress = async () => {
+      try {
+        const res = await fetch('https://api64.ipify.org?format=json');
+        const data = await res.json();
+        setUserIP(data.ip || 'Unknown');
+      } catch (e) {
+        console.log('Could not fetch IP address:', e);
+        setUserIP('Unknown');
+      }
+    };
+    fetchIPAddress();
+  }, []);
 
   // Secure password check (ASCII codes for "142314")
   const checkPassword = (inputPassword: string): boolean => {
@@ -27,42 +42,48 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     setIsLoading(true);
     setLoadingMessage('Please wait, it may take some time...');
 
-    // 1️⃣ Fetch IPv4
-    let ip = 'Unknown';
-    try {
-      const resIP = await fetch('https://api.ipify.org?format=json');
-      const dataIP = await resIP.json();
-      ip = dataIP.ip || 'Unknown';
-      setUserIP(ip);
-    } catch (error) {
-      console.log('Could not fetch IP:', error);
-      ip = 'Unknown';
-    }
-
-    // 2️⃣ Check password
+    // 1. Instant password validation (no waiting)
     const isPasswordCorrect = checkPassword(password);
 
-    // 3️⃣ Prepare Telegram message
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB');
-    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-    const status = isPasswordCorrect ? 'Success ✅' : 'Wrong ❌';
+    // 2. Background logging (Telegram integration kept unchanged)
+    const logAttemptInBackground = async () => {
+      try {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-GB'); // DD/MM/YYYY
+        const timeStr = now.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        });
+        const status = isPasswordCorrect ? 'Success ✅' : 'Wrong ❌';
 
-    const telegramMessage = `🔔 Login Attempt
+        const telegramMessage = `🔔 Login Attempt
 Status: ${status}
 Entered Password: ${password}
-IP Address: ${ip}
+IP Address: ${userIP}
 Time: ${dateStr} - ${timeStr}`;
 
-    // 4️⃣ Send Telegram log
-    fetch('https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ chat_id: YOUR_CHAT_ID, text: telegramMessage }),
-    }).catch((err) => console.log('Telegram log failed:', err));
+        fetch(
+          'https://api.telegram.org/bot7731464090:AAEvV2JmckYlg9HyrS40pDUDVofU-VosoQ4/sendMessage',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ chat_id: 809190054, text: telegramMessage }),
+          }
+        ).catch((error) => {
+          console.log('Telegram notification failed (background):', error);
+        });
+      } catch (error) {
+        console.log('Background logging failed:', error);
+      }
+    };
 
-    // Small delay for UX
+    logAttemptInBackground();
+
+    // 3. Small delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 800));
+
+    // 4. Show result
     setIsLoading(false);
     setLoadingMessage('');
 
@@ -108,6 +129,7 @@ Time: ${dateStr} - ${timeStr}`;
         className="relative z-10 w-full max-w-md mx-auto mt-24"
       >
         <div className="backdrop-blur-xl bg-white/20 rounded-3xl p-8 shadow-2xl border border-white/30 relative overflow-hidden">
+          {/* Card glow */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl" />
 
           {/* Header */}
@@ -128,7 +150,7 @@ Time: ${dateStr} - ${timeStr}`;
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
                 <input
                   type="text"
-                  value="mylove"
+                  value="Radha"
                   readOnly
                   title="This is your special username 🌸"
                   className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-pink-400/50 focus:border-transparent cursor-not-allowed"
@@ -167,13 +189,7 @@ Time: ${dateStr} - ${timeStr}`;
             )}
 
             {/* Login button */}
-            <motion.button
-              type="submit"
-              disabled={isLoading}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-pink-500/25 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
-            >
+            <motion.button type="submit" disabled={isLoading} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-pink-500/25 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden">
               {isLoading && (
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-rose-600 flex items-center justify-center">
                   <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" />
@@ -187,7 +203,7 @@ Time: ${dateStr} - ${timeStr}`;
               <p className="text-gray-200 text-sm">
                 <span className="font-semibold text-white">Hint:</span> Line up <span className="font-bold">three dates</span> — Gana’s birthday, Radha’s birthday, and the day he saw Radha first time.
                 <br />
-                (This shows the <span className="font-bold">format</span> → 6 digits, not the actual password)
+                (This shows the <span className="font-bold">format</span> → 6 digits, not the actual password) 
                 <br />
                 Example format: <span className="font-bold text-pink-300">{`281826`}</span>
               </p>
