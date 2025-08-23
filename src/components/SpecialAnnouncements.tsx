@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Megaphone, Star, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, Megaphone, Sparkles } from "lucide-react";
 
 interface Announcement {
   id: number;
@@ -102,67 +102,61 @@ const SpecialAnnouncements: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-8"
+        className="text-center mb-6"
       >
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <Megaphone className="text-yellow-400 w-7 h-7" />
-          <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-300 via-pink-300 to-rose-300 bg-clip-text text-transparent">
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <Megaphone className="text-yellow-400 w-6 h-6" />
+          <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-yellow-300 via-pink-300 to-rose-300 bg-clip-text text-transparent">
             Special Announcements
           </h2>
-          <Sparkles className="text-pink-400 w-7 h-7" />
+          <Sparkles className="text-pink-400 w-6 h-6" />
         </div>
-        <p className="text-white/70 text-base max-w-2xl mx-auto">
+        <p className="text-white/70 text-sm max-w-xl mx-auto">
           Important messages and special moments shared just for you
         </p>
       </motion.div>
 
       {/* Card Container */}
-      <div className="relative max-w-3xl mx-auto">
+      <div className="relative max-w-xl mx-auto">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
-            initial={{ opacity: 0, x: 60, scale: 0.98 }}
+            initial={{ opacity: 0, x: 50, scale: 0.97 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -60, scale: 0.98 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="relative"
+            exit={{ opacity: 0, x: -50, scale: 0.97 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
           >
             <div
-              className={`relative bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-white/30 shadow-xl ${
-                currentAnnouncement.glowing
-                  ? "ring-2 ring-pink-400/50 shadow-pink-500/20"
-                  : "shadow-purple-500/10"
-              }`}
+              className={`relative bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl 
+              rounded-xl p-5 md:p-6 border border-white/30 shadow-lg
+              ${currentAnnouncement.glowing ? "ring-2 ring-pink-400/50" : "shadow-purple-500/10"}`}
             >
               {/* Priority */}
               <span
-                className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4 ${
-                  currentAnnouncement.priority === "high"
-                    ? "bg-gradient-to-r from-pink-500 to-rose-500 text-white"
-                    : "bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
-                }`}
+                className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold mb-3
+                ${currentAnnouncement.priority === "high"
+                  ? "bg-gradient-to-r from-pink-500 to-rose-500 text-white"
+                  : "bg-gradient-to-r from-purple-500 to-indigo-500 text-white"}`}
               >
-                {currentAnnouncement.priority === "high"
-                  ? "🔥 High Priority"
-                  : "📢 Announcement"}
+                {currentAnnouncement.priority === "high" ? "🔥 High Priority" : "📢 Announcement"}
               </span>
 
               {/* Title */}
               <motion.h3
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-xl md:text-2xl font-bold bg-gradient-to-r from-white to-yellow-100 bg-clip-text text-transparent mb-4"
+                transition={{ delay: 0.15 }}
+                className="text-lg md:text-xl font-bold bg-gradient-to-r from-white to-yellow-100 bg-clip-text text-transparent mb-2"
               >
                 {currentAnnouncement.title}
               </motion.h3>
 
               {/* Message */}
               <motion.p
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-white/90 text-base leading-relaxed mb-4"
+                transition={{ delay: 0.25 }}
+                className="text-white/90 text-sm leading-relaxed mb-3"
               >
                 {currentAnnouncement.message}
               </motion.p>
@@ -175,48 +169,50 @@ const SpecialAnnouncements: React.FC = () => {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-sm font-semibold"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-lg text-xs font-semibold shadow hover:shadow-md transition-all"
                 >
                   💖 Visit Page →
                 </motion.a>
               )}
 
               {/* Date */}
-              <div className="text-white/60 text-sm mt-4">
+              <div className="text-white/60 text-xs mt-3">
                 {formatDate(currentAnnouncement.date)}
               </div>
-
-              {/* Buttons */}
-              {announcements.length > 1 && (
-                <>
-                  <button
-                    onClick={prevAnnouncement}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm rounded-full p-3 text-white hover:bg-white/20 transition"
-                  >
-                    <ChevronLeft size={22} />
-                  </button>
-                  <button
-                    onClick={nextAnnouncement}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm rounded-full p-3 text-white hover:bg-white/20 transition"
-                  >
-                    <ChevronRight size={22} />
-                  </button>
-                </>
-              )}
             </div>
           </motion.div>
         </AnimatePresence>
 
+        {/* Buttons placed OUTSIDE card */}
+        {announcements.length > 1 && (
+          <>
+            <button
+              onClick={prevAnnouncement}
+              className="absolute -left-10 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm 
+              rounded-full p-2 text-white hover:bg-white/20 transition shadow"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              onClick={nextAnnouncement}
+              className="absolute -right-10 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm 
+              rounded-full p-2 text-white hover:bg-white/20 transition shadow"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </>
+        )}
+
         {/* Dots */}
         {announcements.length > 1 && (
-          <div className="flex justify-center gap-2 mt-4">
+          <div className="flex justify-center gap-1.5 mt-3">
             {announcements.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
+                className={`w-2.5 h-2.5 rounded-full transition-all ${
                   index === currentIndex
-                    ? "bg-pink-400 shadow-md"
+                    ? "bg-pink-400 shadow"
                     : "bg-white/30 hover:bg-white/50"
                 }`}
               />
