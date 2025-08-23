@@ -11,17 +11,39 @@ const LoveMeter: React.FC = () => {
     const startDate = new Date('2024-01-01');
     const now = new Date();
     const daysPassed = Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    
+
     // Love grows every day, but caps at 100% (though it's really infinite!)
     const basePercentage = Math.min(95 + (daysPassed % 5), 100);
     setLovePercentage(basePercentage);
   }, []);
 
+  // Telegram message sender
+  const sendMessageToTelegram = async (text: string) => {
+    try {
+      await fetch("https://api.telegram.org/botYOUR_BOT/sendMessage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: 809190054, // Gana's chat id
+          text,
+        }),
+      });
+    } catch (error) {
+      console.error("❌ Failed to send Telegram notification:", error);
+    }
+  };
+
   const handleHeartClick = () => {
     setIsAnimating(true);
+
     // Temporarily boost the love meter
     setLovePercentage(100);
-    
+
+    // Send Telegram notification
+    sendMessageToTelegram(
+      `💖 Radha just filled your heart with love! (Love Meter: 100%)`
+    );
+
     setTimeout(() => {
       setIsAnimating(false);
       // Return to calculated percentage after animation
