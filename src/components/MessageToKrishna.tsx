@@ -8,30 +8,34 @@ const MessageToGana: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
 
   const sendMessageToTelegram = async (text: string) => {
-    try {
-      const response = await fetch(
-        "https://api.telegram.org/botYOUR_BOT/sendMessage",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: 809190054,
-            text,
-          }),
-        }
-      );
-      if (response.ok) {
-        setShowModal(true);
-        setMessage("");
-        setShowNoteBox(false);
-      } else {
-        throw new Error("Failed to send message");
+  try {
+    const response = await fetch(
+      "https://api.telegram.org/bot8683204985:AAGF97Al7dSRT0h1u6OyVN39dwi5KjXTDOI/sendMessage",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: 809190054,
+          text,
+        }),
       }
-    } catch (error) {
-      alert("❌ Failed to send message. Please try again.");
-      console.error("Error sending message:", error);
+    );
+
+    const data = await response.json();
+    console.log(data); // DEBUG
+
+    if (data.ok) {
+      setShowModal(true);
+      setMessage("");
+      setShowNoteBox(false);
+    } else {
+      throw new Error(data.description);
     }
-  };
+  } catch (error) {
+    alert("❌ Failed to send message. Check console.");
+    console.error("Telegram error:", error);
+  }
+};
 
   return (
     <>
